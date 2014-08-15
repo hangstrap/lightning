@@ -1,6 +1,10 @@
 name: lightning
 description: A sample web application
 dependencies:
+  angular: 0.10.0
   browser: any
   intl: any
   jsonx: any
+  shadow_dom: any
+transformers:
+- angular
