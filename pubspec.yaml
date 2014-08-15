@@ -6,5 +6,6 @@ dependencies:
   intl: any
   jsonx: any
   shadow_dom: any
+  unittest: any
 transformers:
 - angular
