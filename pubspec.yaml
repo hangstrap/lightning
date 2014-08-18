@@ -4,7 +4,7 @@ dependencies:
   angular: 0.10.0
   browser: any
   intl: any
-  jsonx: any
+  jsonx: 1.2.7
   shadow_dom: any
   unittest: any
 transformers:
