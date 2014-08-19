@@ -1,4 +1,4 @@
-library lightning;
+library lightning_messages;
 
 import 'package:jsonx/jsonx.dart' as JSON;
 import 'package:lightning/strike.dart';

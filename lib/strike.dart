@@ -1,4 +1,4 @@
-library lightning;
+library lightningstrike;
 class Strike {
   
   Strike();
