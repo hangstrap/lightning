@@ -35,7 +35,7 @@ class LightingWebSocket {
       case RequireAuthMessage: _sendAuthDocument(); break;
       case AuthResponseMessage: _authReply(s); break;
       case StatusMessage: _statusMessage( s); break;
-      case LightingMessage: _lightingMessage( s);break;
+      case StrikeMessage: _lightingMessage( s);break;
     }
   }
   void _sendAuthDocument() {
@@ -54,8 +54,8 @@ class LightingWebSocket {
   void _statusMessage( StatusMessage s){
     print( "Status message = ${s.status}" );
   }
-  void _lightingMessage( LightingMessage s){
-    print( "Lighting message = ${s}");
+  void _lightingMessage( StrikeMessage s){
+    print( "Lighting message = ${s.data.toString()}");
   }
 }
 

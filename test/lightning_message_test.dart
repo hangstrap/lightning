@@ -56,7 +56,4 @@ void main() {
     });
   });
 }
-String strike = '{"version":2,"type":"lightning","data":{"timeMillis":1408356097825,"dateTime":"2014-08-18T10:01:37.825Z","latitude":-34.6258,"longitude":159.8742,"amplitude":0.0,"direction":"CLOUD","ellipse":{"major":-1.0,"minor":-1.0,"bearing":-1}}}';
-
-String status = '{"version":2,"type":"status","data":{"status":"ok","since":1408205175415}}';
 
