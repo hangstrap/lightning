@@ -26,7 +26,23 @@ void main() {
     test("should decode status", () {
       String json = '{"version":2,"type":"status","data":{"status":"ok","since":1408205175415}}';
       StatusMessage result = decodeLightingMessageFromJson(json);
-      expect(result.authSuccess, equals(true));
+      expect(result.ok, equals(true));
+    });
+    test("should decode strike", () {
+      String json = """{"version":2,"type":"lightning","data":{"timeMillis":1408356097825,
+                      "dateTime":"2014-08-18T10:01:37.825Z","latitude":-34.6258,"longitude":159.8742,
+                      "amplitude":10.0,"direction":"GROUND",
+                      "ellipse":{"major":10.0,"minor":5.0,"bearing":120}}}""";
+      StrikeMessage result = decodeLightingMessageFromJson(json);
+      expect(result.data.amplitude, equals(10.0));
+      expect(result.data.dateTime, equals("2014-08-18T10:01:37.825Z"));
+      expect(result.data.direction, equals("GROUND"));
+      expect(result.data.latitude, equals(-34.6258));
+      expect(result.data.longitude, equals(159.8742));
+      expect(result.data.ellipse.bearing, equals(120.0));
+      expect(result.data.ellipse.major, equals(10.0));
+      expect(result.data.ellipse.minor, equals(5.0));
+
     });
   });
 
@@ -42,5 +58,4 @@ void main() {
 String strike = '{"version":2,"type":"lightning","data":{"timeMillis":1408356097825,"dateTime":"2014-08-18T10:01:37.825Z","latitude":-34.6258,"longitude":159.8742,"amplitude":0.0,"direction":"CLOUD","ellipse":{"major":-1.0,"minor":-1.0,"bearing":-1}}}';
 
 String status = '{"version":2,"type":"status","data":{"status":"ok","since":1408205175415}}';
-
 

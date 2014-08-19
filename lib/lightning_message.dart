@@ -1,6 +1,7 @@
 library lightning;
 
 import 'package:jsonx/jsonx.dart' as JSON;
+import 'package:lightning/strike.dart';
 
 LightingMessage decodeLightingMessageFromJson(String json) {
   Map result = JSON.decode(json);
@@ -9,6 +10,10 @@ LightingMessage decodeLightingMessageFromJson(String json) {
       return new RequireAuthMessage();
     case "auth":
       return JSON.decode( json, type: const JSON.TypeHelper<AuthResponseMessage>().type);
+    case "status":
+      return JSON.decode( json, type: const JSON.TypeHelper<StatusMessage>().type);
+    case "lightning":
+      return JSON.decode( json, type: const JSON.TypeHelper<StrikeMessage>().type);
   }
   return null;
 }
@@ -41,4 +46,18 @@ class AuthResponseMessage extends LightingMessage<Success>
 }
 class Success {
   bool success;
+}
+
+class StatusMessage extends LightingMessage<Status> 
+{
+  String get status => data.status;
+  bool get ok=> status== 'ok';
+}
+class Status{
+  String status;
+  int since;
+}
+
+class StrikeMessage extends LightingMessage<Strike>{
+  
 }
