@@ -33,6 +33,7 @@ void main() {
                       "dateTime":"2014-08-18T10:01:37.825Z","latitude":-34.6258,"longitude":159.8742,
                       "amplitude":10.0,"direction":"GROUND",
                       "ellipse":{"major":10.0,"minor":5.0,"bearing":120}}}""";
+      
       StrikeMessage result = decodeLightingMessageFromJson(json);
       expect(result.data.amplitude, equals(10.0));
       expect(result.data.dateTime, equals("2014-08-18T10:01:37.825Z"));

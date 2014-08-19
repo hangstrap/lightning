@@ -27,7 +27,6 @@ class LightingWebSocket {
 
   }
   void onMessageReceived(MessageEvent e) {
-    print("receved message ${e}");
     String data = e.data;
     print("receved message ${data}");
 
@@ -35,6 +34,8 @@ class LightingWebSocket {
     switch( s.runtimeType){
       case RequireAuthMessage: _sendAuthDocument(); break;
       case AuthResponseMessage: _authReply(s); break;
+      case StatusMessage: _statusMessage( s); break;
+      case LightingMessage: _lightingMessage( s);break;
     }
   }
   void _sendAuthDocument() {
@@ -43,12 +44,18 @@ class LightingWebSocket {
     AuthDocMessage msg = new AuthDocMessage.create( key);
     
     String json = encodeLightingMessageToJson( msg);
-    print("*** About to send ${json}");
+    print("About to send ${json}");
     webSocket.sendString(json);
   }
   
   void _authReply( AuthResponseMessage s){
     print( "Auth responce ${s.authSuccess}");
+  }
+  void _statusMessage( StatusMessage s){
+    print( "Status message = ${s.status}" );
+  }
+  void _lightingMessage( LightingMessage s){
+    print( "Lighting message = ${s}");
   }
 }
 
