@@ -19,7 +19,7 @@ class MyAppModule extends Module {
 
 void main() {
   
-  LightingWebSocket webSocket = new LightingWebSocket( getAuthDoc,  receivedStrike,receivedStatus );
+  LightingWebSocket webSocket = new LightingWebSocket( getAuthDoc,  receivedStrike, receivedStatus );
   applicationFactory().addModule(new MyAppModule()).run();
   
 

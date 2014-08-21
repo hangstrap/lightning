@@ -29,7 +29,7 @@ class LightingMessage<T> {
   T data;
 }
 
-class RequireAuthMessage extends LightingMessage {
+class RequireAuthMessage extends LightingMessage<AuthRequired> {
   RequireAuthMessage();
 }
 class AuthDocMessage extends LightingMessage<String> {
@@ -39,6 +39,9 @@ class AuthDocMessage extends LightingMessage<String> {
     type ="auth";
     data = key;
   }
+}
+class AuthRequired{
+  
 }
 class AuthResponseMessage extends LightingMessage<Success> 
 {

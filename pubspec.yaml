@@ -1,7 +1,7 @@
 name: lightning
 description: A sample web application
 dependencies:
-  angular: 0.10.0
+  angular: 0.13.0
   browser: any
   intl: any
   jsonx: 1.2.7
