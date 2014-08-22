@@ -9,7 +9,7 @@ class Strike {
   
   
   int timeMillis;
-  DateTime get time => new DateTime.fromMillisecondsSinceEpoch(timeMillis, isUtc: true);
+  //DateTime get time => new DateTime.fromMillisecondsSinceEpoch(timeMillis, isUtc: true);
 //  Duration get ago => new DateTime.now().toUtc().difference(time);
   
   String dateTime;

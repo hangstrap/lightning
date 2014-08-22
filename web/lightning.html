@@ -13,9 +13,9 @@
     
       <h3>Strikes </h3>
       <ul>
-        <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike.time}}</span></li>
+        <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike.timeMillis}}</span></li>
       </ul>
-      <div><button ng-click="lightingViewController.addStrike">add Strike</button></div>
+      <div><button ng-click="lightingViewController.addStrike()">add Strike</button></div>
             <!--<div><button ng-click="lightingViewController.openSocket">open socket</button></div>-->
       
     </div>

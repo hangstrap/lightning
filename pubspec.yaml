@@ -5,6 +5,7 @@ dependencies:
   browser: any
   intl: any
   jsonx: 1.2.7
+  logging: any
   shadow_dom: any
   unittest: any
 transformers:

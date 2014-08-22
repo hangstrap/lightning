@@ -10,12 +10,15 @@ class LightningViewController {
   
 
   LightningViewController() {
-//  currentStrikes = [new Strike.createWithCurrentTime(), new Strike.createWithCurrentTime()];
+    print("in constructor");
   }
   
   void addStrike(){
     currentStrikes.add(  new Strike.createWithCurrentTime());
   }
   
+//  void receivedStrike( Strike strike){
+//    currentStrikes.add( strike);
+//  }
 }
 
