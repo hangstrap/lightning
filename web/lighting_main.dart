@@ -14,7 +14,7 @@ import "dart:html";
 class MyAppModule extends Module {
 
   MyAppModule() {
-    bind(LightningViewController);
+   bind(LightningViewController);
     //    type(LightningViewController);
   }
 }
@@ -25,7 +25,7 @@ void main() {
   Logger.root.onRecord.listen((LogRecord r) {
     print(r.message);
   });
-  LightingWebSocket webSocket = new LightingWebSocket(getAuthDoc, receivedStrike, receivedStatus);
+//  LightingWebSocket webSocket = new LightingWebSocket(getAuthDoc, receivedStrike, receivedStatus);
   applicationFactory().addModule(new MyAppModule()).run();
 
 
