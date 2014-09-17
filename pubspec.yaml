@@ -1,12 +1,12 @@
 name: lightning
 description: A sample web application
 dependencies:
-  web_components: any
-  angular: 0.13.0
+  angular: any
   browser: any
   intl: any
   jsonx: 1.2.7
   logging: any
   unittest: any
+  web_components: any
 transformers:
 - angular

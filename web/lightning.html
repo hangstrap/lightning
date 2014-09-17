@@ -6,10 +6,10 @@
     <title>Lightning</title>
     <link rel="stylesheet" href="lightning.css">
     
-
+<!--
     <script src="packages/web_components/platform.js"></script>
     <script src="packages/web_components/dart_support.js"></script>
-
+-->
     <script type="application/dart" src="lighting_main.dart"></script>
     <script type="text/javascript" src="packages/browser/dart.js"></script>
   </head>
@@ -20,10 +20,11 @@
     
       <h3>Strikes </h3>
       <ul>
-        <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike.timeMillis}}</span></li>
+      <!--  <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike.timeMillis} {{strike.direction}} {{strike.longitude}} {{strike.latitude}}</span></li>
+        -->
+        <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike}}</span></li>
       </ul>
       <div><button ng-click="lightingViewController.addStrike()">add Strike</button></div>
-            <!--<div><button ng-click="lightingViewController.openSocket">open socket</button></div>-->
       
     </div>
 

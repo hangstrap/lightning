@@ -1,16 +1,10 @@
 library lightningstrike;
 
-class Strike {
+class Strike 
+{
   
-  Strike();
-  Strike.createWithCurrentTime(){
-    timeMillis = new DateTime.now().millisecondsSinceEpoch;
-  }
-  
-  
+
   int timeMillis;
-  //DateTime get time => new DateTime.fromMillisecondsSinceEpoch(timeMillis, isUtc: true);
-//  Duration get ago => new DateTime.now().toUtc().difference(time);
   
   String dateTime;
   double latitude;
@@ -18,7 +12,18 @@ class Strike {
   double amplitude;
   String direction;
   Ellipse ellipse;
-//  String toString() => "Strike< time=${time.toUtc()} ago=${ago.inHours} milisec = ${timeMillis} ${dateTime} ${direction} >";
+
+  
+  Strike();
+  Strike.createWithCurrentTime(){
+    timeMillis = new DateTime.now().millisecondsSinceEpoch;
+    direction = "?";
+    longitude = 100.0;
+    latitude = 100.0;
+  }
+  String toString(){
+    return "${timeMillis} ${longitude} ${latitude}";
+  }
 }
 
 class Ellipse {
