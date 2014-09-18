@@ -22,7 +22,11 @@ class LightingWebSocket {
   LightingWebSocket(this.getAuthDocFunction, this.receivedStikeFunction, this.receivedStatusFunction) {
 
     print("Starting web socket");
-    webSocket = new WebSocket("wss://test-lightning-au.metconnect.co.nz/websocket/v2 ");
+    
+//    var url = "wss://lightning.metconnect.co.nz/websocket/v2";
+    var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
+    print( url);
+    webSocket = new WebSocket(url);
 
     webSocket.onOpen.forEach((_) {
 
@@ -30,7 +34,9 @@ class LightingWebSocket {
       webSocket.onMessage.forEach(onMessageReceived);
     });
     webSocket.onError.forEach((e) => print("web socket error ${e}"));
-    webSocket.onClose.forEach((e) => print("web socket close ${e}"));
+    webSocket.onClose.forEach((e) {
+      print("web socket close ${e}");
+    });
 
 
   }
@@ -39,20 +45,19 @@ class LightingWebSocket {
     print("receved message ${data}");
 
     LightingMessage s = decodeLightingMessageFromJson(data);
-    switch (s.runtimeType) {
-      case RequireAuthMessage:
-        _sendAuthDocument();
-        break;
-      case AuthResponseMessage:
-        AuthResponseMessage a = s;
-        print("Auth responce ${a.authSuccess}");
-        break;
-      case StatusMessage:
-        receivedStatusFunction(s.data);
-        break;
-      case StrikeMessage:
-        receivedStikeFunction(s.data);
-        break;
+    if (s.runtimeType == RequireAuthMessage) {
+      _sendAuthDocument();
+      
+    } else if (s.runtimeType == AuthResponseMessage) {
+      AuthResponseMessage a = s;      
+      print("Auth responce ${a.authSuccess}");
+      
+    } else if (s.runtimeType == StatusMessage) {
+      receivedStatusFunction(s.data);
+      
+    } else if (s.runtimeType == StrikeMessage) {
+      receivedStikeFunction(s.data);
+
     }
   }
   void _sendAuthDocument() {

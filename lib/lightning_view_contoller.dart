@@ -10,7 +10,8 @@ import 'package:lightning/lightning_web_socket.dart';
 @Controller(selector: '[current-strikes]', publishAs: 'lightingViewController')
 class LightningViewController {
 
-  List currentStrikes = [new Strike.createWithCurrentTime(), new Strike.createWithCurrentTime()];
+  List currentStrikes = [new Strike.createWithCurrentTime()];
+  int statusCount=0;
 
 
   LightningViewController() {
@@ -31,6 +32,7 @@ class LightningViewController {
   }
   void receivedStatus(Status status) {
     print("received Status ${status.status}");
+    statusCount++;
   }
   Future<String> getAuthDoc() {
     print("loading auth doc from server");
