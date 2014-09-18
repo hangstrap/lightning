@@ -36,14 +36,14 @@ void main() {
       
       StrikeMessage result = decodeLightingMessageFromJson(json);
       expect(result.data.amplitude, equals(10.0));
-      expect(result.data.dateTime, equals("2014-08-18T10:01:37.825Z"));
       expect(result.data.direction, equals("GROUND"));
       expect(result.data.latitude, equals(-34.6258));
       expect(result.data.longitude, equals(159.8742));
       expect(result.data.ellipse.bearing, equals(120.0));
       expect(result.data.ellipse.major, equals(10.0));
       expect(result.data.ellipse.minor, equals(5.0));
-
+      expect(result.data.asDateTime, equals( new DateTime.fromMillisecondsSinceEpoch( 1408356097825, isUtc:true)));
+      expect(result.data.asDateTime, equals( new DateTime.utc(2014,8,18,10,01,37,825)));
     });
   });
 

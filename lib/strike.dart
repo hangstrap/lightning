@@ -2,19 +2,19 @@ library lightningstrike;
 
 class Strike 
 {
-  
-
   int timeMillis;
-  
-  String dateTime;
+
+//  String dateTime;
   double latitude;
   double longitude;
   double amplitude;
   String direction;
   Ellipse ellipse;
 
-  
+  //used by the json constructor
   Strike();
+  
+  //Used for 'testing'
   Strike.createWithCurrentTime(){
     timeMillis = new DateTime.now().millisecondsSinceEpoch;
     direction = "?";
@@ -22,8 +22,10 @@ class Strike
     latitude = 100.0;
   }
   String toString(){
-    return "${timeMillis} ${longitude} ${latitude}";
+    return "${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
   }
+  
+  DateTime get asDateTime => new DateTime.fromMillisecondsSinceEpoch( timeMillis, isUtc:true);
 }
 
 class Ellipse {
