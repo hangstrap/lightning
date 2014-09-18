@@ -3,8 +3,6 @@ library lightningstrike;
 class Strike 
 {
   int timeMillis;
-
-//  String dateTime;
   double latitude;
   double longitude;
   double amplitude;
@@ -21,10 +19,8 @@ class Strike
     longitude = 100.0;
     latitude = 100.0;
   }
-  String toString(){
-    return "${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
-  }
   
+  String toString()=>"${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
   DateTime get asDateTime => new DateTime.fromMillisecondsSinceEpoch( timeMillis, isUtc:true);
 }
 
