@@ -23,9 +23,10 @@ class LightingWebSocket {
 
     print("Starting web socket");
     //looks dead
-//   var url = "wss://test-lightning-au.met\\connect.co.nz/websocket/v1";
+    var url = "ws://ec2-54-79-207-115.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2";
+//var url = "wss://test-lightning-au.metconnect.co.nz/websocket/v2";
 //   var url = "wss://lightning.metconnect.co.nz/websocket/v2";
-var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
+//var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
     print( url);
     webSocket = new WebSocket(url);
 
