@@ -22,9 +22,10 @@ class LightingWebSocket {
   LightingWebSocket(this.getAuthDocFunction, this.receivedStikeFunction, this.receivedStatusFunction) {
 
     print("Starting web socket");
-    
-//    var url = "wss://lightning.metconnect.co.nz/websocket/v2";
-    var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
+    //looks dead
+//   var url = "wss://test-lightning-au.met\\connect.co.nz/websocket/v1";
+//   var url = "wss://lightning.metconnect.co.nz/websocket/v2";
+var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
     print( url);
     webSocket = new WebSocket(url);
 

@@ -3,6 +3,8 @@ import 'package:angular/application_factory.dart';
 import 'package:lightning/lightning_view_contoller.dart';
 import 'package:logging/logging.dart';
 
+//import 'dart:html';
+//import 'package:google_maps/google_maps.dart';
 
 class MyAppModule extends Module {
 
@@ -17,6 +19,7 @@ void main() {
   Logger.root.onRecord.listen((LogRecord r) {
     print(r.message);
   });
+  
   applicationFactory().addModule(new MyAppModule()).run();
 
 

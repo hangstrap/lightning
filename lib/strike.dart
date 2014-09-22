@@ -16,8 +16,8 @@ class Strike
   Strike.createWithCurrentTime(){
     timeMillis = new DateTime.now().millisecondsSinceEpoch;
     direction = "?";
-    longitude = 100.0;
-    latitude = 100.0;
+    longitude = 174.8;
+    latitude = -41.3;
   }
   
   String toString()=>"${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";

@@ -33,6 +33,10 @@ packages:
     description: di
     source: hosted
     version: "2.0.2"
+  google_maps:
+    description: google_maps
+    source: hosted
+    version: "2.0.7"
   html5lib:
     description: html5lib
     source: hosted
@@ -41,6 +45,10 @@ packages:
     description: intl
     source: hosted
     version: "0.9.10"
+  js_wrapping:
+    description: js_wrapping
+    source: hosted
+    version: "0.1.2"
   jsonx:
     description: jsonx
     source: hosted
