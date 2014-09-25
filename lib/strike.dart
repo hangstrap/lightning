@@ -18,6 +18,8 @@ class Strike
     direction = "?";
     longitude = 174.8;
     latitude = -41.3;
+    direction="GROUND";
+    amplitude = 2.6;
   }
   
   String toString()=>"${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";

@@ -26,7 +26,7 @@ class LightningViewController {
     visualRefresh = true;
 
     MapOptions mapOptions = new MapOptions()
-        ..zoom = 8
+        ..zoom = 4
         ..center = new LatLng(-34.397, 150.644)
         ..mapTypeId = MapTypeId.ROADMAP;
 
@@ -40,29 +40,49 @@ class LightningViewController {
   }
 
   void receivedStrike(Strike strike) {
-
     print("received Strike ${strike}");
+
+    if (strike.direction == 'CLOUD') return;
+
+
     currentStrikes.add(strike);
-    LatLng ll = new LatLng(strike.latitude, strike.longitude);
-    map.panTo(ll);
+    if (currentStrikes.length > 10) {
+      currentStrikes.removeAt(0);
+    }
+    LatLng latLong = new LatLng(strike.latitude, strike.longitude);
+    double circleOpacity = 1.0;
+    
+    CircleOptions circleOptions = new CircleOptions()
+    ..center = latLong
+    ..strokeOpacity =circleOpacity
+    ..map = map
+    ..strokeColor = '#FF0000'
+    ..fillOpacity =0
+    ..radius = (strike.amplitude * 100000 / map.zoom)
+    ..clickable = true;
+    
+    Circle circle = new Circle( circleOptions);
 
-
-
-    Marker marker = new Marker(new MarkerOptions()
-        ..position = ll
-        ..map = map
-        ..title = "${strike.direction} ${strike.amplitude}");
-
-    marker.onClick.listen((e) {
+    circle.onClick.listen((e) {
       InfoWindow infoWindow = new InfoWindow(new InfoWindowOptions());
       infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime} ${strike.direction} ${strike.amplitude}</p><div>";
-      infoWindow.open(map, marker);
-      new Future.delayed( new Duration(seconds:10)).then( (e)=> infoWindow.close());
-      
+      infoWindow.open(map, circle);
+
+      new Future.delayed(new Duration(seconds: 10)).then((e) => infoWindow.close());
     });
-    new Future.delayed( new Duration(minutes:10)).then( (e){
-      marker.map = null;
-      marker = null;
+    new Timer.periodic(new Duration(seconds: 3), (Timer timer){
+      
+      circleOpacity = circleOpacity - 0.1;
+      print( 'circleOpacity = ${circleOpacity}');      
+      if( circleOpacity <= 0){
+        circle.map = null;
+        timer.cancel();
+      }else{      
+        circleOptions.strokeOpacity = circleOpacity;
+//        circleOptions.fillOpacity = circleOpacity;
+        circle.options = circleOptions;
+
+      }
     });
 
 
