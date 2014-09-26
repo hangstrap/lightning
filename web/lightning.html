@@ -9,7 +9,7 @@
       html, body, #map_canvas {
         margin: 0;
         padding: 0;
-        height: 90%;
+        height: 80%;
       }
     </style>
 <!--    <script type="application/dart" src="page.dart"></script> -->
@@ -21,14 +21,14 @@
   
   <body>
     <h1>Lightning</h1>    
-        <div id="map_canvas"></div>
+    <div id="map_canvas"></div>
+    <input type="checkbox" ng-model="lightingViewController.showCloud">Show Cloud
+    
     <div current-strikes>
     
       <h3>Strikes </h3>
       <ul>
-      <!--  <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike.timeMillis} {{strike.direction}} {{strike.longitude}} {{strike.latitude}}</span></li>
-        -->
-        <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike}}</span></li>
+      <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike}}</span></li>
       </ul>
       <div><button ng-click="lightingViewController.addStrike()">add Strike</button></div>
       

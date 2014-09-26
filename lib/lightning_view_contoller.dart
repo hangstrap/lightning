@@ -4,6 +4,7 @@ import 'package:angular/angular.dart';
 import 'package:lightning/strike.dart';
 import "dart:async";
 import "dart:html";
+
 import 'package:lightning/lightning_message.dart';
 import 'package:lightning/lightning_web_socket.dart';
 
@@ -15,7 +16,8 @@ class LightningViewController {
 
   List currentStrikes = [new Strike.createWithCurrentTime()];
   int statusCount = 0;
-
+  bool showCloud = true;
+  
 
   GMap map;
 
@@ -31,7 +33,8 @@ class LightningViewController {
         ..mapTypeId = MapTypeId.ROADMAP;
 
     map = new GMap(querySelector("#map_canvas"), mapOptions);
-
+    
+    //open the web socket
     new LightingWebSocket(getAuthDoc, receivedStrike, receivedStatus);
   }
 
@@ -42,7 +45,7 @@ class LightningViewController {
   void receivedStrike(Strike strike) {
     print("received Strike ${strike}");
 
-    if (strike.direction == 'CLOUD') return;
+    if ((strike.direction == 'CLOUD') && (!showCloud)) return;
 
 
     currentStrikes.add(strike);
@@ -51,17 +54,24 @@ class LightningViewController {
     }
     LatLng latLong = new LatLng(strike.latitude, strike.longitude);
     double circleOpacity = 1.0;
-    
+
     CircleOptions circleOptions = new CircleOptions()
-    ..center = latLong
-    ..strokeOpacity =circleOpacity
-    ..map = map
-    ..strokeColor = '#FF0000'
-    ..fillOpacity =0
-    ..radius = (strike.amplitude * 100000 / map.zoom)
-    ..clickable = true;
-    
-    Circle circle = new Circle( circleOptions);
+        ..center = latLong
+        ..strokeOpacity = circleOpacity
+        ..map = map
+        ..strokeColor = '#FF0000'
+        ..fillOpacity = 0
+        ..clickable = true;
+
+    if (strike.direction == "GROUND") {
+      circleOptions.radius = (strike.amplitude.abs() * 100000 / map.zoom);
+      circleOptions.strokeColor = "green";
+    } else {
+      circleOptions.radius = (100000 / map.zoom);
+      circleOptions.strokeColor = "orange";
+    }
+
+    Circle circle = new Circle(circleOptions);
 
     circle.onClick.listen((e) {
       InfoWindow infoWindow = new InfoWindow(new InfoWindowOptions());
@@ -70,16 +80,14 @@ class LightningViewController {
 
       new Future.delayed(new Duration(seconds: 10)).then((e) => infoWindow.close());
     });
-    new Timer.periodic(new Duration(seconds: 3), (Timer timer){
-      
+    new Timer.periodic(new Duration(seconds: 3), (Timer timer) {
+
       circleOpacity = circleOpacity - 0.1;
-      print( 'circleOpacity = ${circleOpacity}');      
-      if( circleOpacity <= 0){
+      if (circleOpacity <= 0) {
         circle.map = null;
         timer.cancel();
-      }else{      
+      } else {
         circleOptions.strokeOpacity = circleOpacity;
-//        circleOptions.fillOpacity = circleOpacity;
         circle.options = circleOptions;
 
       }
