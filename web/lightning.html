@@ -11,6 +11,10 @@
         padding: 0;
         height: 80%;
       }
+      .strikeInfo{
+          text-align: center;
+          width:200px;
+      }
     </style>
 <!--    <script type="application/dart" src="page.dart"></script> -->
     <script type="application/dart" src="lighting_main.dart"></script>
@@ -23,7 +27,7 @@
     <h1>Lightning</h1>    
     <div id="map_canvas"></div>
     <input type="checkbox" ng-model="lightingViewController.showCloud">Show Cloud
-    
+    fade delay {{lightingViewController.fadeDelay / 60 | number:2}} sec<input type="range" ng-model="lightingViewController.fadeDelay" id="points" value="180" min="0" max="600">
     <div current-strikes>
     
       <h3>Strikes </h3>

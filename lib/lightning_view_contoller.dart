@@ -17,7 +17,7 @@ class LightningViewController {
   List currentStrikes = [new Strike.createWithCurrentTime()];
   int statusCount = 0;
   bool showCloud = true;
-  
+  int fadeDelay = 50;
 
   GMap map;
 
@@ -43,7 +43,7 @@ class LightningViewController {
   }
 
   void receivedStrike(Strike strike) {
-    print("received Strike ${strike}");
+    print("received Strike ${strike} ${fadeDelay}sec");
 
     if ((strike.direction == 'CLOUD') && (!showCloud)) return;
 
@@ -75,12 +75,14 @@ class LightningViewController {
 
     circle.onClick.listen((e) {
       InfoWindow infoWindow = new InfoWindow(new InfoWindowOptions());
-      infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime} ${strike.direction} ${strike.amplitude}</p><div>";
-      infoWindow.open(map, circle);
-
+      infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
+      infoWindow.position = latLong;
+      infoWindow.open(map);
+      
       new Future.delayed(new Duration(seconds: 10)).then((e) => infoWindow.close());
     });
-    new Timer.periodic(new Duration(seconds: 3), (Timer timer) {
+    
+    new Timer.periodic(new Duration(seconds: fadeDelay), (Timer timer) {
 
       circleOpacity = circleOpacity - 0.1;
       if (circleOpacity <= 0) {
