@@ -22,9 +22,13 @@ class LightingWebSocket {
   LightingWebSocket(this.getAuthDocFunction, this.receivedStikeFunction, this.receivedStatusFunction) {
 
     print("Starting web socket");
-var url = "wss://lightning.metconnect.com.au/websocket/v2";
-
-//var url = "wss://test-lightning.metconnect.co.nz/websocket/v2";
+    //Unzipped: -java17 -java16.
+    //Zipped: -java16 
+    Map urls = {'localhost-java17': "ws://localhost:8088/websocket/v2", 
+                'prod-oz-java16':"wss://lightning.metconnect.com.au/websocket/v2", 
+                'test-oz-java17':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
+                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2"};
+    var url = urls['localhost-java17'];
     print( url);
     webSocket = new WebSocket(url);
 

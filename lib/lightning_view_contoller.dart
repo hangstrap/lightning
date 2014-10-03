@@ -33,7 +33,7 @@ class LightningViewController {
         ..mapTypeId = MapTypeId.ROADMAP;
 
     map = new GMap(querySelector("#map_canvas"), mapOptions);
-    
+
     //open the web socket
     new LightingWebSocket(getAuthDoc, receivedStrike, receivedStatus);
   }
@@ -43,6 +43,9 @@ class LightningViewController {
   }
 
   void receivedStrike(Strike strike) {
+    displayStrike(strike, "green", "blue");
+  }
+  void displayStrike(Strike strike, String groundColour, cloudColour) {
     print("received Strike ${strike} ${fadeDelay}sec");
 
     if ((strike.direction == 'CLOUD') && (!showCloud)) return;
@@ -59,16 +62,15 @@ class LightningViewController {
         ..center = latLong
         ..strokeOpacity = circleOpacity
         ..map = map
-        ..strokeColor = '#FF0000'
         ..fillOpacity = 0
         ..clickable = true;
 
     if (strike.direction == "GROUND") {
       circleOptions.radius = (strike.amplitude.abs() * 100000 / map.zoom);
-      circleOptions.strokeColor = "green";
+      circleOptions.strokeColor = groundColour;
     } else {
       circleOptions.radius = (100000 / map.zoom);
-      circleOptions.strokeColor = "orange";
+      circleOptions.strokeColor = cloudColour;
     }
 
     Circle circle = new Circle(circleOptions);
@@ -78,10 +80,10 @@ class LightningViewController {
       infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
       infoWindow.position = latLong;
       infoWindow.open(map);
-      
+
       new Future.delayed(new Duration(seconds: 10)).then((e) => infoWindow.close());
     });
-    
+
     new Timer.periodic(new Duration(seconds: fadeDelay), (Timer timer) {
 
       circleOpacity = circleOpacity - 0.1;
