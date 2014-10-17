@@ -16,7 +16,7 @@ class LightningViewController {
 
   List currentStrikes = [];
   int statusCount = 0;
-  bool showCloud = true;
+  bool showCloud = false;
   int fadeDelay = 10; //seconds
 
   GMap map;
@@ -87,14 +87,10 @@ class LightningViewController {
         ..map = map
         ..fillOpacity = 0
         ..clickable = true;
-
-    if (strike.direction == "GROUND") {
-      circleOptions.radius = (strike.amplitude.abs() * 100000 / map.zoom);
-      circleOptions.strokeColor = groundColour;
-    } else {
-      circleOptions.radius = (100000 / map.zoom);
-      circleOptions.strokeColor = cloudColour;
-    }
+    
+    double amplitude = ( strike.direction=="CLOUD")? 1.0 : strike.amplitude.abs();
+    circleOptions.radius = (amplitude * 100000 / map.zoom);
+    circleOptions.strokeColor = ( strike.direction=="GROUND" )? groundColour : cloudColour;
 
     Circle circle = new Circle(circleOptions);
 

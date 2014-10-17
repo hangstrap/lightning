@@ -25,6 +25,8 @@ class Strike
   
   String toString()=>"${server} ${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
   DateTime get asDateTime => new DateTime.fromMillisecondsSinceEpoch( timeMillis, isUtc:true);
+  
+  
 }
 
 class Ellipse {
