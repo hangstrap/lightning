@@ -26,8 +26,8 @@
   <body>
     <h1>Lightning</h1>    
     <div id="map_canvas"></div>
-    <input type="checkbox" ng-model="lightingViewController.showCloud">Show Cloud
-    fade delay {{lightingViewController.fadeDelay / 60 | number:2}} sec<input type="range" ng-model="lightingViewController.fadeDelay" id="points" value="180" min="0" max="600">
+    <input type="checkbox" ng-model="lightingViewController.showCloud">Show Cloud<br/>
+    fade delay {{lightingViewController.fadeDelay / 60| number:2}} minutes<input type="range" ng-model="lightingViewController.fadeDelay" id="points" value="180" min="0" max="600">
     <div current-strikes>
     
       <h3>Strikes </h3>

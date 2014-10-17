@@ -15,7 +15,7 @@ class MyAppModule extends Module {
 
 void main() {
 
-  Logger.root.level = Level.FINEST;
+  Logger.root.level = Level.WARNING;
   Logger.root.onRecord.listen((LogRecord r) {
     print(r.message);
   });

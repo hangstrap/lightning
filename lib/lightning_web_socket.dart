@@ -5,6 +5,7 @@ import "dart:html";
 import "dart:async";
 import 'package:lightning/lightning_message.dart';
 import 'package:lightning/strike.dart';
+import 'package:logging/logging.dart';
 
 //Define callbacks
 typedef void receivedStrike(Strike strike);
@@ -13,40 +14,38 @@ typedef Future<String> getAuthDoc();
 
 class LightingWebSocket {
 
+  final Logger log = new Logger('LightingWebSocket');
+  
   WebSocket webSocket;
 
   final getAuthDoc getAuthDocFunction;
   final receivedStrike receivedStikeFunction;
   final receivedStatus receivedStatusFunction;
+  
+  final String url;
+  
 
-  LightingWebSocket(this.getAuthDocFunction, this.receivedStikeFunction, this.receivedStatusFunction) {
+  LightingWebSocket(this.url,  this.getAuthDocFunction, this.receivedStikeFunction, this.receivedStatusFunction) {
 
-    print("Starting web socket");
-    //Unzipped: -java17 -java16.
-    //Zipped: -java16 
-    Map urls = {'localhost-java17': "ws://localhost:8088/websocket/v2", 
-                'prod-oz-java16':"wss://lightning.metconnect.com.au/websocket/v2", 
-                'test-oz-java17':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
-                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2"};
-    var url = urls['localhost-java17'];
+    log.info("Starting web socket");
     print( url);
     webSocket = new WebSocket(url);
 
     webSocket.onOpen.forEach((_) {
 
-      print("onOpen event has been fired - web socket is connected");
+      log.info("onOpen event has been fired - web socket is connected");
       webSocket.onMessage.forEach(onMessageReceived);
     });
-    webSocket.onError.forEach((e) => print("web socket error ${e}"));
+    webSocket.onError.forEach((e) => log.severe("web socket error ${e} ${url}"));
     webSocket.onClose.forEach((e) {
-      print("web socket close ${e}");
+      log.severe("web socket close ${e}");
     });
 
 
   }
   void onMessageReceived(MessageEvent e) {
     String data = e.data;
-    print("receved message ${data}");
+    log.info("receved message ${data}");
 
     LightingMessage s = decodeLightingMessageFromJson(data);
     if (s.runtimeType == RequireAuthMessage) {
@@ -54,7 +53,11 @@ class LightingWebSocket {
       
     } else if (s.runtimeType == AuthResponseMessage) {
       AuthResponseMessage a = s;      
-      print("Auth responce ${a.authSuccess}");
+      if( a.authSuccess){
+        log.info("Auth responce ${a.authSuccess}");
+      }else{
+        log.severe("Auth responce failed ${a.data}");
+      }
       
     } else if (s.runtimeType == StatusMessage) {
       receivedStatusFunction(s.data);
@@ -69,7 +72,7 @@ class LightingWebSocket {
     getAuthDocFunction().then((String authDoc) {
 
       String json = encodeLightingMessageToJson(new AuthDocMessage.create(authDoc));
-      print("About to send ${json}");
+      log.info("About to send ${json}");
       webSocket.sendString(json);
     });
   }

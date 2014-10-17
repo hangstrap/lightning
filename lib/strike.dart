@@ -8,6 +8,7 @@ class Strike
   double amplitude;
   String direction;
   Ellipse ellipse;
+  String server;
 
   //used by the json constructor
   Strike();
@@ -22,7 +23,7 @@ class Strike
     amplitude = 2.6;
   }
   
-  String toString()=>"${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
+  String toString()=>"${server} ${asDateTime}  E${longitude} S${latitude} ${amplitude}A ${direction}";
   DateTime get asDateTime => new DateTime.fromMillisecondsSinceEpoch( timeMillis, isUtc:true);
 }
 

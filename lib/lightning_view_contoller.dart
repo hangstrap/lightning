@@ -14,10 +14,10 @@ import 'package:google_maps/google_maps.dart';
 @Controller(selector: '[current-strikes]', publishAs: 'lightingViewController')
 class LightningViewController {
 
-  List currentStrikes = [new Strike.createWithCurrentTime()];
+  List currentStrikes = [];
   int statusCount = 0;
   bool showCloud = true;
-  int fadeDelay = 50;
+  int fadeDelay = 10; //seconds
 
   GMap map;
 
@@ -33,33 +33,56 @@ class LightningViewController {
         ..mapTypeId = MapTypeId.ROADMAP;
 
     map = new GMap(querySelector("#map_canvas"), mapOptions);
+    
+    //Unzipped: -java17 -java16.
+    //Zipped: -java16 
+    Map urls = {'localhost-java17': "ws://localhost:8088/websocket/v2", 
+                'prod-oz-java16':"wss://lightning.metconnect.com.au/websocket/v2", 
+                'test-oz-java17':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
+                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2"};
 
-    //open the web socket
-    new LightingWebSocket(getAuthDoc, receivedStrike, receivedStatus);
+
+    //open the web socket to Kattron
+    new LightingWebSocket(urls['prod-oz-java16'], getAuthDoc, receivedKattronStrike, receivedStatus);
+    
+    //open the web socket to Gpats
+    new LightingWebSocket(urls['test-oz-java17'], getAuthDoc, receivedGpatsStrike, receivedStatus);
   }
 
   void addStrike() {
-    receivedStrike(new Strike.createWithCurrentTime());
+    
+    receivedKattronStrike(new Strike.createWithCurrentTime());
+
   }
 
-  void receivedStrike(Strike strike) {
-    displayStrike(strike, "green", "blue");
+  void receivedKattronStrike(Strike strike) {
+    strike.server = "Kattron";
+    displayStrike(strike, "green", "green");
+  }
+  void receivedGpatsStrike(Strike strike) {
+    strike.server = "Gpatz";
+    displayStrike(strike, "red", "red");
   }
   void displayStrike(Strike strike, String groundColour, cloudColour) {
-    print("received Strike ${strike} ${fadeDelay}sec");
+    
+    print("${strike}");
 
     if ((strike.direction == 'CLOUD') && (!showCloud)) return;
-
-
-    currentStrikes.add(strike);
-    if (currentStrikes.length > 10) {
-      currentStrikes.removeAt(0);
+    
+    String server = strike.server;    
+    if( inListOfStrikes( strike)){
+      groundColour="black";
+      cloudColour="black";
+      server ="both";
     }
+
+    addToListOfStrikes(strike);
+    
     LatLng latLong = new LatLng(strike.latitude, strike.longitude);
     double circleOpacity = 1.0;
 
     CircleOptions circleOptions = new CircleOptions()
-        ..center = latLong
+        ..center = latLong 
         ..strokeOpacity = circleOpacity
         ..map = map
         ..fillOpacity = 0
@@ -77,16 +100,17 @@ class LightningViewController {
 
     circle.onClick.listen((e) {
       InfoWindow infoWindow = new InfoWindow(new InfoWindowOptions());
-      infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
+      infoWindow.content = "<div class='strikeInfo'><p>${server} ${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
       infoWindow.position = latLong;
       infoWindow.open(map);
 
       new Future.delayed(new Duration(seconds: 10)).then((e) => infoWindow.close());
     });
 
-    new Timer.periodic(new Duration(seconds: fadeDelay), (Timer timer) {
+    new Timer.periodic(new Duration(seconds: fadeDelay ~/ 10), (Timer timer) {
 
       circleOpacity = circleOpacity - 0.1;
+
       if (circleOpacity <= 0) {
         circle.map = null;
         timer.cancel();
@@ -99,12 +123,20 @@ class LightningViewController {
 
 
   }
+
+  bool inListOfStrikes( Strike strike){
+    return currentStrikes.any( (Strike it) => ( it.latitude == strike.latitude) && ( it.longitude == strike.longitude));    
+  }
+  void addToListOfStrikes(Strike strike) {    
+    currentStrikes.add(strike);
+    if (currentStrikes.length > 10) {
+      currentStrikes.removeAt(0);
+    }
+  }
   void receivedStatus(Status status) {
-    print("received Status ${status.status}");
     statusCount++;
   }
   Future<String> getAuthDoc() {
-    print("loading auth doc from server");
-    return HttpRequest.getString("AuthDoc.txt");
+    return HttpRequest.getString("AuthDoc2.txt");
   }
 }
