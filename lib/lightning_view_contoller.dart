@@ -33,70 +33,79 @@ class LightningViewController {
         ..mapTypeId = MapTypeId.ROADMAP;
 
     map = new GMap(querySelector("#map_canvas"), mapOptions);
-    
+
     //Unzipped: -java17 -java16.
-    //Zipped: -java16 
-    Map urls = {'localhost-java17': "ws://localhost:8088/websocket/v2", 
-                'prod-oz-java16':"wss://lightning.metconnect.com.au/websocket/v2", 
-                'test-oz-java17':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
-                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2"};
+    //Zipped: -java16
+    Map urls = {
+      'localhost-java17': "ws://localhost:8088/websocket/v2",
+      'prod-oz-java16': "wss://lightning.metconnect.com.au/websocket/v2",
+      'test-oz-java17': "wss://test-lightning-au.metconnect.co.nz/websocket/v2",
+      'test-nz-java16': "wss://test-lightning.metconnect.co.nz/websocket/v2"
+    };
 
 
     //open the web socket to Kattron
     new LightingWebSocket(urls['prod-oz-java16'], getAuthDoc, receivedKattronStrike, receivedStatus);
-    
+
     //open the web socket to Gpats
     new LightingWebSocket(urls['test-oz-java17'], getAuthDoc, receivedGpatsStrike, receivedStatus);
   }
 
   void addStrike() {
-    
+
     receivedKattronStrike(new Strike.createWithCurrentTime());
 
   }
 
   void receivedKattronStrike(Strike strike) {
     strike.server = "Kattron";
-    displayStrike(strike, "green", "green");
+    processStrike(strike);
   }
   void receivedGpatsStrike(Strike strike) {
     strike.server = "Gpatz";
-    displayStrike(strike, "red", "red");
+    processStrike(strike);
   }
-  void displayStrike(Strike strike, String groundColour, cloudColour) {
-    
-    print("${strike}");
+  void processStrike(Strike strike) {
+
 
     if ((strike.direction == 'CLOUD') && (!showCloud)) return;
-    
-    String server = strike.server;    
-    if( inListOfStrikes( strike)){
-      groundColour="black";
-      cloudColour="black";
-      server ="both";
+
+    print("${strike}");
+
+    String colour = (strike.server == "Kattron") ? "green" : "red";
+
+
+    if (inListOfStrikes(strike)) {
+      colour = "white";
     }
 
     addToListOfStrikes(strike);
-    
+
+    displayStrike(strike, colour);
+  }
+
+  void displayStrike(Strike strike, String colour) {
+
+
     LatLng latLong = new LatLng(strike.latitude, strike.longitude);
     double circleOpacity = 1.0;
 
     CircleOptions circleOptions = new CircleOptions()
-        ..center = latLong 
+        ..center = latLong
         ..strokeOpacity = circleOpacity
         ..map = map
         ..fillOpacity = 0
         ..clickable = true;
-    
-    double amplitude = ( strike.direction=="CLOUD")? 1.0 : strike.amplitude.abs();
+
+    double amplitude = (strike.direction == "CLOUD") ? 1.0 : strike.amplitude.abs();
     circleOptions.radius = (amplitude * 100000 / map.zoom);
-    circleOptions.strokeColor = ( strike.direction=="GROUND" )? groundColour : cloudColour;
+    circleOptions.strokeColor = colour;
 
     Circle circle = new Circle(circleOptions);
 
     circle.onClick.listen((e) {
       InfoWindow infoWindow = new InfoWindow(new InfoWindowOptions());
-      infoWindow.content = "<div class='strikeInfo'><p>${server} ${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
+      infoWindow.content = "<div class='strikeInfo'><p>${strike.asDateTime}<br/>${strike.direction} ${strike.amplitude}A</p><div>";
       infoWindow.position = latLong;
       infoWindow.open(map);
 
@@ -120,10 +129,10 @@ class LightningViewController {
 
   }
 
-  bool inListOfStrikes( Strike strike){
-    return currentStrikes.any( (Strike it) => ( it.latitude == strike.latitude) && ( it.longitude == strike.longitude));    
+  bool inListOfStrikes(Strike strike) {
+    return currentStrikes.any((Strike it) => (it.latitude == strike.latitude) && (it.longitude == strike.longitude));
   }
-  void addToListOfStrikes(Strike strike) {    
+  void addToListOfStrikes(Strike strike) {
     currentStrikes.add(strike);
     if (currentStrikes.length > 10) {
       currentStrikes.removeAt(0);
