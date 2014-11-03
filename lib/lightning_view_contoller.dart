@@ -16,7 +16,7 @@ class LightningViewController {
 
   List currentStrikes = [];
   int statusCount = 0;
-  bool showCloud = true;
+  bool showCloud = false;
   int fadeDelay = 10; //seconds
 
   GMap map;
@@ -39,14 +39,15 @@ class LightningViewController {
     Map urls = {'localhost-java17': "ws://localhost:8088/websocket/v2", 
                 'prod-oz-java16':"wss://lightning.metconnect.com.au/websocket/v2", 
                 'test-oz-java17':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
-                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2"};
+                'test-nz-java16':"wss://test-lightning.metconnect.co.nz/websocket/v2",
+                'test-lpatz':"ws://ec2-54-253-177-143.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2"};
 
 
     //open the web socket to Kattron
     new LightingWebSocket(urls['prod-oz-java16'], getAuthDoc, receivedKattronStrike, receivedStatus);
     
     //open the web socket to Gpats
-    new LightingWebSocket(urls['test-oz-java17'], getAuthDoc, receivedGpatsStrike, receivedStatus);
+    new LightingWebSocket(urls['test-lpatz'], getAuthDoc, receivedGpatsStrike, receivedStatus);
   }
 
   void addStrike() {
