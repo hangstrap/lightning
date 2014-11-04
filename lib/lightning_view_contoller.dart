@@ -73,7 +73,7 @@ class LightningViewController {
 
     print("${strike}");
 
-    String colour = (strike.server == "Kattron") ? "green" : "red";
+    String colour = (strike.server == "Kattron") ? "blue" : "yellow";
 
 
     if (inListOfStrikes(strike)) {
