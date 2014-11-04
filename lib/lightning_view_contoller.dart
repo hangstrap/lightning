@@ -99,7 +99,7 @@ class LightningViewController {
         ..clickable = true;
 
     double amplitude = (strike.direction == "CLOUD") ? 1.0 : strike.amplitude.abs();
-    circleOptions.radius = (amplitude * 100000 / map.zoom);
+    circleOptions.radius = (amplitude * 10000 );
     circleOptions.strokeColor = colour;
 
     Circle circle = new Circle(circleOptions);
