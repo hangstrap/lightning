@@ -31,14 +31,14 @@
     <div current-strikes>
     
       <h3>Strikes </h3>
+          Strikes: Strikes are Green, Gpatx are Red
       <ul>
       <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike}}</span></li>
       </ul>
-      <div><button ng-click="lightingViewController.addStrike()">add Strike</button></div>
-      
     </div>
     <h3>Status</h3>
-    <div>Received {{lightingViewController.statusCount}} status messages</div>
-
+ 
+    <div>Received {{lightingViewController.kattonStatusCount}} Katton status messages </div>
+    <div>Received {{lightingViewController.gpatzStatusCount}} Gpatz status messages</div>
   </body>
 </html>

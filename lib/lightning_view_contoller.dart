@@ -15,7 +15,8 @@ import 'package:google_maps/google_maps.dart';
 class LightningViewController {
 
   List currentStrikes = [];
-  int statusCount = 0;
+  int kattonStatusCount = 0;
+  int gpatzStatusCount = 0;
   bool showCloud = false;
   int fadeDelay = 10; //seconds
 
@@ -38,16 +39,17 @@ class LightningViewController {
     //Zipped: -java16 
     Map urls = {'localhost7': "ws://localhost:8088/websocket/v2", 
                 'prod-oz':"wss://lightning.metconnect.com.au/websocket/v2", 
-                'test-oz':"wss://test-lightning-au.metconnect.co.nz/websocket/v2", 
+                'test-oz':"wss://test-lightning-au.metconnect.co.nz/websocket/v2",  
                 'test-nz':"wss://test-lightning.metconnect.co.nz/websocket/v2",
-                'test-lpatz':"ws://ec2-54-253-177-143.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2"};
+                'test-lpatz':"ws://ec2-54-253-177-143.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2",
+                'test-lpatz-lb':"ws://dev-lightning-au-gpats-1383789414.ap-southeast-2.elb.amazonaws.com:8080/websocket/v2"};
 
 
     //open the web socket to Kattron
-    new LightingWebSocket(urls['prod-oz'], getAuthDoc, receivedKattronStrike, receivedStatus);
+    new LightingWebSocket(urls['prod-oz'], getAuthDoc, receivedKattronStrike, receivedKattronStatus);
 
     //open the web socket to Gpats
-    new LightingWebSocket(urls['test-lpatz'], getAuthDoc, receivedGpatsStrike, receivedStatus);
+    new LightingWebSocket(urls['test-lpatz-lb'], getAuthDoc, receivedGpatsStrike, receivedGpatzStatus);
   }
 
   void addStrike() {
@@ -137,8 +139,11 @@ class LightningViewController {
       currentStrikes.removeAt(0);
     }
   }
-  void receivedStatus(Status status) {
-    statusCount++;
+  void receivedKattronStatus(Status status) {
+    kattonStatusCount++;
+  }
+  void receivedGpatzStatus(Status status) {
+    gpatzStatusCount++;
   }
   Future<String> getAuthDoc() {
     return HttpRequest.getString("AuthDoc2.txt");
