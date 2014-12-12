@@ -45,7 +45,9 @@ class LightingWebSocket {
   }
   void onMessageReceived(MessageEvent e) {
     String data = e.data;
-    log.info("receved message ${data}");
+    
+    
+    print("receved message ${data}");
 
     LightingMessage s = decodeLightingMessageFromJson(data);
     if (s.runtimeType == RequireAuthMessage) {
