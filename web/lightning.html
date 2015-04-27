@@ -16,7 +16,6 @@
           width:200px;
       }
     </style>
-<!--    <script type="application/dart" src="page.dart"></script> -->
     <script type="application/dart" src="lighting_main.dart"></script>
     <script type="text/javascript" src="packages/browser/dart.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -31,7 +30,6 @@
     <div current-strikes>
     
       <h3>Strikes </h3>
-          Strikes: Kattron are Blue, Gpatx are Red
       <ul>
       <li class="pointer" ng-repeat="strike in lightingViewController.currentStrikes"><span>{{strike}}</span></li>
       </ul>
@@ -39,6 +37,5 @@
     <h3>Status</h3>
  
     <div>Received {{lightingViewController.kattonStatusCount}} Katton status messages, {{lightingViewController.kattonStrikeCount}} Katton strike messages  </div>
-    <div>Received {{lightingViewController.gpatzStatusCount}} Gpatz status messages, {{lightingViewController.gpatzStrikeCount}} Gpatx strike messages  </div>
   </body>
 </html>

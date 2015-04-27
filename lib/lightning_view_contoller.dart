@@ -16,9 +16,7 @@ class LightningViewController {
 
   List currentStrikes = [];
   int kattonStatusCount = 0;
-  int gpatzStatusCount = 0;
   int kattonStrikeCount = 0;
-  int gpatzStrikeCount = 0;
   bool showCloud = false;
   int fadeDelay = 10; //seconds
 
@@ -41,29 +39,16 @@ class LightningViewController {
     //Zipped: -java16 
     Map urls = {'localhost7': "ws://localhost:8088/websocket/v2", 
                 'prod-oz':"wss://lightning.metconnect.com.au/websocket/v2", 
-                'test-oz':"wss://test-lightning-au.metconnect.co.nz/websocket/v2",
-                
+                'test-oz':"wss://test-lightning-au.metconnect.co.nz/websocket/v2",            
                 'test-oz-1':"ws://ec2-54-66-35-22.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2",  
-
                 'test-oz-2':"ws://ec2-54-253-144-210.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2",  
-
                 'test-nz':"wss://test-lightning.metconnect.co.nz/websocket/v2",
                 'test-lpatz':"ws://ec2-54-253-177-143.ap-southeast-2.compute.amazonaws.com:8080/websocket/v2",
                 'test-lpatz-lb':"ws://dev-lightning-au-gpats-1383789414.ap-southeast-2.elb.amazonaws.com:8080/websocket/v2"};
 
 
     //open the web socket to Kattron
-new LightingWebSocket(urls['prod-oz'], getAuthDoc, receivedKattronStrike, receivedKattronStatus);
-
-    //open the web socket to Gpats
-new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedGpatsStrike, receivedGpatzStatus);
-
-
-    
-    
-    //open the web socket to Kattron
-//  new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedKattronStrike, receivedKattronStatus);
-
+    new LightingWebSocket(urls['prod-oz'], getAuthDoc, receivedKattronStrike, receivedKattronStatus);
   }
   
   
@@ -79,11 +64,7 @@ new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedGpatsStrike, recei
     processStrike(strike);
     kattonStrikeCount++;
   }
-  void receivedGpatsStrike(Strike strike) {
-    strike.server = "Gpatz";
-    processStrike(strike);
-    gpatzStrikeCount++;
-  }
+
   void processStrike(Strike strike) {
 
 
@@ -91,19 +72,12 @@ new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedGpatsStrike, recei
 
     print("${strike}");
 
-    String colour = (strike.server == "Kattron") ? "blue" : "red";
-
-
-    if (inListOfStrikes(strike)) {
-      colour = "white";
-    }
-
     addToListOfStrikes(strike);
 
-    displayStrike(strike, colour);
+    displayStrike(strike);
   }
 
-  void displayStrike(Strike strike, String colour) {
+  void displayStrike(Strike strike) {
 
 
     LatLng latLong = new LatLng(strike.latitude, strike.longitude);
@@ -118,7 +92,7 @@ new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedGpatsStrike, recei
 
     double amplitude = (strike.direction == "CLOUD") ? 1.0 : strike.amplitude.abs();
     circleOptions.radius = (amplitude * 10000 );
-    circleOptions.strokeColor = colour;
+    circleOptions.strokeColor = (strike.direction == "CLOUD") ? "blue" : "green";
 
     Circle circle = new Circle(circleOptions);
 
@@ -160,9 +134,7 @@ new LightingWebSocket(urls['localhost7'], getAuthDoc, receivedGpatsStrike, recei
   void receivedKattronStatus(Status status) {
     kattonStatusCount++;
   }
-  void receivedGpatzStatus(Status status) {
-    gpatzStatusCount++;
-  }
+
   Future<String> getAuthDoc() {
     return HttpRequest.getString("AuthDoc2.txt");
   }
